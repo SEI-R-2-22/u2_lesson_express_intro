@@ -7,6 +7,12 @@
 ## Overview
 [Express](http://expressjs.com) is a library we'll use to make web servers for our front-end applications to query our databases.
 
+# Getting Started
+- `Fork` & `Clone`
+- `cd` into the directory
+- `touch` a `server.js` file
+- `code .` to open in VSCode
+
 ## Objectives
  - Review the HTTP request / response flow
  - Explain the role of a web server in a full-stack application
@@ -21,7 +27,7 @@ When you visit a webpage in your browser, you type in a URL like `https://wizard
 
 The web server sends an **HTTP response** back with the HTML content of that website. Magic!
 
-This **HTTP request** and **response** cycle is at the heart of the web. You might have already wrote HTTP requests - the JavaScript function `fetch()` makes HTTP requests, and provides HTTP responses back to you.
+This **HTTP request** and **response** cycle is at the heart of the web.
 
 ![Magic](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.giphy.com%2Fmedia%2FQX0rXtXaDkdJm%2Fgiphy.gif&f=1&nofb=1)
 
@@ -31,29 +37,29 @@ Express is a JavaScript library to set up your own web server, which listens for
 
 We'll use Express solely as a **JSON API server**. Our database might contain information about quidditch matches. Our React-powered front-end application will make `axios` calls to our server to, say, get all the matches at `/api/quidditch-matches.json`. 
 
-In working on the web server, it is your job to write code to listen for a `/api/quidditch-matches.json` HTTP request, query information from the database, and then send it back to the front-end in an HTTP reseponse.
+In working on the web server, it is your job to write code to listen for a `/api/quidditch-matches.json` HTTP request, query information from the database, and then send it back to the front-end in an HTTP response.
 
 ## Installing
 
 To use Express, you'll add the package on a ***project by project basis*** with `npm`:
 
 ```
-npm i express
+npm install express
 ```
 
 ## Express Boilerplate
 
-To use Express, we `require()` the package, create a new Express application object, and finally start the application "listening" on a specific port:
+To use Express, we `require()` the package in our `server.js` file, create a new Express application object, and finally start the application "listening" on a specific port. Let's build this out together:
 
 ```js
-const express = require('express');
-const PORT = process.env.PORT || 3000;
+const express = require('express')
+const PORT = process.env.PORT || 3001
 
-const app = express();
+const app = express()
 
 app.listen(PORT, () => {
-  console.log(`Express server listening on port ${PORT}`);
-});
+  console.log(`Express server listening on port ${PORT}`)
+})
 ```
 
 Our server won't do anything just yet, this is just boilerplate to use Express.
@@ -66,15 +72,15 @@ In Express, you define a **route** in a `server.js` file.  A route is a path the
 
 ```js
 app.get('/', (req, res) => {
-  res.send("You're a wizard, Harry!");
-});
+  res.send("You're a wizard, Harry!")
+})
 ```
 
-Whenever an HTTP request to `http://localhost:3000/` is made, the handler function is called. This function has access to two variables: `req` and `res` which represent the HTTP **request** (any information the user sent along to us) and the HTTP **response** (any information the server bounces back).
+Whenever an HTTP request to `http://localhost:3001/` is made, the handler function is called. This function has access to two variables: `req` and `res` which represent the HTTP **request** (any information the user sent along to us) and the HTTP **response** (any information the server bounces back).
 
 You might end up doing a lot in these route handler functions. One thing they have to do is **send** an HTTP response back, which we're doing here with `res()`.
 
-When a user visits `http://localhost:3000/` in the browser, they'll see "You're a wizard, Harry!" displayed on the page. Note that if they go to `http://localhost:3000/news`, we see an error message "Cannot GET /news" because that's a different path that we haven't defined a route for.
+When a user visits `http://localhost:3001/` in the browser, they'll see "You're a wizard, Harry!" displayed on the page. Note that if they go to `http://localhost:3001/news`, we see an error message "Cannot GET /news" because that's a different path that we haven't defined a route for.
 
 ## Running an Express Server With `nodemon`
 
@@ -85,7 +91,7 @@ A web server is a long-running process, which you could just run with `node serv
 Let's use a cool package called `nodemon` instead. We add this on a ***project by project basis***:
 
 ```
-npm i nodemon --save-dev
+npm install nodemon --save-dev
 ```
 
 Then modify the `scripts` section in the `package.json` file to add a `start` and `dev` script. This allows us to run `npm start` to run a one time spin up of our server *or* `npm run dev` to run our server with `nodemon`:
@@ -113,18 +119,18 @@ In our Express server in `server.js`, let's define the following routes:
 ## Route Parameters
 If you consider two URLs:
 
- - goodvibes.com/article/how-to-improve-your-drumming
- - goodvibes.com/article/the-best-vibraphones
+ - wizardingworld.com/article/top-ten-wizards-all-time
+ - wizardingworld.com/article/draco-malfoy-villain-or-victim
 
-You could safely assume that both of these URLs are articles, just with different [URL slugs](https://en.wikipedia.org/wiki/Clean_URL#Slug): `how-to-improve-your-drumming` and `the-best-vibraphones`. By convention, if a part of the url contains two words, we join them with `-`. This is known as "sluggifying".
+You could safely assume that both of these URLs are articles, just with different [URL slugs](https://en.wikipedia.org/wiki/Clean_URL#Slug): `top-ten-wizards-all-time` and `draco-malfoy-villain-or-victim`. By convention, if a part of the URL contains two words, we join them with `-`. This is known as "sluggifying".
 
 When writing an Express route, you can access the dynamic parts of the path by declaring them as **route parameters**:
 
 ```js
 app.get('/article/:slug', (req, res) => {
-  console.log(req.params);
-  // { slug: 'how-to-improve-your-drumming' }
-});
+  console.log(req.params)
+  // { slug: 'top-ten-wizards-all-time' }
+})
 ```
 
 In the path definition, add a colon before a meaningful name for the parameter. You'll have access to the dynamic value inside of the `req.params` object.
